@@ -18,7 +18,7 @@ fi
 
 rm -r dist || true;
 mkdir -p dist;
-zip -j dist/lambda.zip ./src/index.js;
+zip -j dist/lambda.zip ./src/*.js;
 
 aws lambda update-function-code \
    --function-name $FUNCTION_NAME \
