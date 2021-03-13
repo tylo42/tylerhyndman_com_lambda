@@ -8,6 +8,8 @@ exports.build = async () => {
     return {
         name: metadata.name,
         waypointTitle: metadata.waypointTitle,
+        profileImage: metadata.profileImage,
+        headImage: metadata.headImage,
         waypoints,
         flair
     }
@@ -19,6 +21,8 @@ async function getMetaData() {
     return {
         name: metadata.Items[0].name,
         waypointTitle: metadata.Items[0].waypointTitle,
+        profileImage: metadata.Items[0].profileImage,
+        headImage: metadata.Items[0].headImage
     }
 }
 
