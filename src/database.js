@@ -4,7 +4,7 @@ const AWS = require('aws-sdk')
 const docClient = new AWS.DynamoDB.DocumentClient({region: 'us-west-2'})
 
 exports.read = async (tableName, limit) => {
-    console.log("Scanning dynamoDb table: metadata");
+    console.log(`Scanning dynamoDb table: ${tableName}`);
 
     let scanningParameters = {
         TableName: tableName,
