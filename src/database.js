@@ -1,9 +1,9 @@
 'user strict';
 
+const config = require('./config.js');
 const AWS = require('aws-sdk');
-AWS.config.update({
-    region: 'us-west-2'
-});
+
+AWS.config.update(config.awsConfig);
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 exports.read = async (tableName, limit) => {

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha ./test/unit/*.spec.js",
+    "e2e": "mocha ./test/e2e/*.spec.js",
     "check": "eslint ./src/*.js"
   },
   "repository": {
@@ -18,8 +19,10 @@
   },
   "homepage": "https://github.com/tylo42/tylerhyndman_com_lambda#readme",
   "devDependencies": {
+    "axios": "^0.21.1",
     "chai": "^4.3.4",
     "eslint": "^7.22.0",
+    "lambda-local": "^1.7.4",
     "mocha": "^8.3.2",
     "sinon": "^9.2.4",
     "sinon-chai": "^3.5.0"
