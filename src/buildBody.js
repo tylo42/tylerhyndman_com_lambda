@@ -1,74 +1,66 @@
 'use strict';
 
-const database = require('./database.js');
+class BodyBuilder {
 
-exports.build = async () => {
-    const [metadata, waypoints, flair] = await Promise.all([getMetaData(), getWaypoints(), getFlair()]);
+    constructor(database) {
+        this.database = database;
+    }
 
-    return {
-        name: metadata.name,
-        waypointTitle: metadata.waypointTitle,
-        profileImage: metadata.profileImage,
-        headImage: metadata.headImage,
-        waypoints,
-        flair
+    async build() {
+        const [metadata, waypoints, flair] = await Promise.all([this.getMetaData(), this.getWaypoints(), this.getFlair()]);
+
+        return {
+            name: metadata.name,
+            waypointTitle: metadata.waypointTitle,
+            profileImage: metadata.profileImage,
+            headImage: metadata.headImage,
+            waypoints,
+            flair
+        }
+    }
+    
+    async getMetaData() {
+        const metadata = await this.database.read('metadata', 1);
+        const firstItem = metadata.Items[0];
+
+        return {
+            name: (firstItem) ? firstItem.name : null,
+            waypointTitle: (firstItem) ? firstItem.waypointTitle : null,
+            profileImage: (firstItem) ? firstItem.profileImage : null,
+            headImage: (firstItem) ? firstItem.headImage : null
+        }
+    }
+    
+    async getWaypoints() {
+        return (await this.database.read('waypoints', 10)).Items
+            .sort((a, b) => (a.start < b.start) ? 1 : -1)
+            .map(this.transformWaypoint);
+    }
+
+    transformWaypoint(waypoint) {
+        const result = Object.assign({}, waypoint)
+
+        result.when = (waypoint.end) ? 
+                `${waypoint.start} - ${waypoint.end}` :
+                `Since ${waypoint.start}`
+        delete result.start;
+        delete result.end;
+
+        return result;
+    }
+    
+    async getFlair() {
+        return (await this.database.read('flair', 10)).Items
+            .sort((a, b) => (a.id > b.id) ? 1 : -1)
+            .map(this.transformFlair);
+    }
+
+    transformFlair(flair) {
+        return {
+            image: flair.image,
+            link: flair.link
+        }
     }
 }
 
-async function getMetaData() {
-    const metadata = await database.read('metadata', 1)
-
-    return {
-        name: metadata.Items[0].name,
-        waypointTitle: metadata.Items[0].waypointTitle,
-        profileImage: metadata.Items[0].profileImage,
-        headImage: metadata.Items[0].headImage
-    }
-}
-
-async function getWaypoints() {
-    const waypoints = await database.read('waypoints', 10)
-
-    waypoints.Items.sort((a, b) => {
-        var ap = a.start;
-        var bp = b.start;
-
-        if(ap > bp) {
-           return -1;
-        } else if(ap < bp) {
-           return 1;
-        } else {
-           return 0;
-        }
-    });
-
-    waypoints.Items.map(waypoint => {
-        if(waypoint.end) {
-            waypoint.when = `${waypoint.start} - ${waypoint.end}`
-        } else {
-            waypoint.when = `Since ${waypoint.start}`
-        }
-
-    });
-    
-    return waypoints.Items;
-}
-
-async function getFlair() {
-    const flair = await database.read('flair', 10)
-
-    flair.Items.sort((a, b) => {
-        var ap = a.id;
-        var bp = b.id;
-
-        if(ap < bp) {
-           return -1;
-        } else if(ap > bp) {
-           return 1;
-        } else {
-           return 0;
-        }
-    });
-    
-    return flair.Items;
-}
+module.exports = BodyBuilder

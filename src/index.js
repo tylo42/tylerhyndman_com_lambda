@@ -1,9 +1,12 @@
 'use strict';
  
-const buildBody = require('./buildBody.js')
+const database = require('./database.js');
+const BodyBuilder = require('./buildBody.js');
  
 exports.handler = async () => {
-    const body = await buildBody.build();
+    const bodyBuilder = new BodyBuilder(database);
+
+    const body = await bodyBuilder.build();
     
     const response = {
         statusCode: 200,

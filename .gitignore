@@ -1,2 +1,3 @@
 dist/
 environment.sh
+node_modules/
