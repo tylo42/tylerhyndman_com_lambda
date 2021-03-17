@@ -4,7 +4,8 @@
   "description": "An AWS Lambda that pulls data out of multiple DynamoDB tables and returns them in JSON format.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./test/unit/*.spec.js"
+    "test": "mocha ./test/unit/*.spec.js",
+    "check": "eslint ./src/*.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   "homepage": "https://github.com/tylo42/tylerhyndman_com_lambda#readme",
   "devDependencies": {
     "chai": "^4.3.4",
+    "eslint": "^7.22.0",
     "mocha": "^8.3.2",
     "sinon": "^9.2.4",
     "sinon-chai": "^3.5.0"
