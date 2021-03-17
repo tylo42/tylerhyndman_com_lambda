@@ -5,7 +5,7 @@ const chai = require('chai');
 const { expect } = require('chai');
 const sinonChai = require('sinon-chai');
 
-const BodyBuilder = require('../../src/buildBody.js');
+const BodyBuilder = require('../../src/bodyBuilder.js');
 
 chai.use(sinonChai);
 
