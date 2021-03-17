@@ -1,7 +1,10 @@
 'user strict';
 
-const AWS = require('aws-sdk')
-const docClient = new AWS.DynamoDB.DocumentClient({region: 'us-west-2'})
+const AWS = require('aws-sdk');
+AWS.config.update({
+    region: 'us-west-2'
+});
+const docClient = new AWS.DynamoDB.DocumentClient();
 
 exports.read = async (tableName, limit) => {
     console.log(`Scanning dynamoDb table: ${tableName}`);
