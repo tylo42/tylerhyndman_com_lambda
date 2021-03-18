@@ -7,3 +7,10 @@ services:
     container_name: dynamodb-local
     ports:
       - "8080:8000"
+  sqs:
+    image: roribio16/alpine-sqs
+    hostname: sqs-local
+    container_name: sqs-local
+    ports:
+      - "9324:9324"
+      - "9325:9325"

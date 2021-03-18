@@ -13,6 +13,7 @@ const { expect } = require('chai');
 describe("End to end test", () => {
     it('should pull data out of DynamoDb', async () => {
         await setUpDb();
+        const sqsPromise = getSQSMessage()
 
         let response = await axios.get("http://localhost:8081", {
             headers: {
@@ -30,7 +31,8 @@ describe("End to end test", () => {
             'Access-Control-Allow-Credentials': true,
             'Content-Type': 'application/json'
         });
-        expect(JSON.parse(response.data.data.body)).to.deep.equal({
+
+        const expectedResponse = {
             "name": "Name",
             "waypointTitle": "Waypoint Title",
             "profileImage": "Profile Image",
@@ -67,8 +69,48 @@ describe("End to end test", () => {
                     "link": "Link 2"
                 }
             ]
-        });
+        }
+
+        expect(JSON.parse(response.data.data.body)).to.deep.equal(expectedResponse);
+
+        const messages = await sqsPromise;
+        expect(messages.length).to.equal(1);
+        expect(JSON.parse(messages[0].Body)).to.deep.equal(expectedResponse);
+
     });
+
+    async function getSQSMessage() {
+        const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
+
+        const QueueUrl = "http://localhost:9324/queue/default";
+
+        const params = {
+            AttributeNames: [],
+            MaxNumberOfMessages: 10,
+            MessageAttributeNames: [
+               "All"
+            ],
+            QueueUrl,
+            VisibilityTimeout: 20,
+            WaitTimeSeconds: 1
+           };
+
+        const data = await sqs.receiveMessage(params).promise();
+
+        if(data.Messages) {
+            await Promise.all(data.Messages.map(async m => {
+                const deleteParams = {
+                    QueueUrl,
+                    ReceiptHandle: m.ReceiptHandle
+                };
+                await sqs.deleteMessage(deleteParams).promise()
+            }))
+
+            return data.Messages;
+        } else {
+            return [];
+        }
+    }
 
     async function setUpDb() {
         var dynamodb = new AWS.DynamoDB();

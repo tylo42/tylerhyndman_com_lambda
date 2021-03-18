@@ -1,7 +1,9 @@
 'use strict';
 
+
 const database = require('./database.js');
 const BodyBuilder = require('./bodyBuilder.js');
+const { publish } = require('./publish.js');
  
 exports.handler = async () => {
     const bodyBuilder = new BodyBuilder(database);
@@ -18,6 +20,9 @@ exports.handler = async () => {
         },
         body: JSON.stringify(body)
     };
+
+    await publish(body);
+
     console.log("response: " + JSON.stringify(response))
     return response;
 };
