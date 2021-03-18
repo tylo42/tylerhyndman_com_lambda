@@ -5,13 +5,11 @@ npm run check
 npm run test
 
 docker-compose up -d
+
 npx lambda-local -l src/index.js -h handler --watch 8081 &
-
 PID_OF_LAMBDA=$!
-
 sleep 1
-
-kill -0 $PID_OF_LAMBDA
+kill -0 $PID_OF_LAMBDA # Will exit if the lambda process is not running
 
 npm run e2e
 
