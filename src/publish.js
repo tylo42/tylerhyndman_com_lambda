@@ -9,7 +9,7 @@ exports.publish = async (body) => {
     const params = {
        DelaySeconds: 0,
        MessageAttributes: {},
-       MessageBody: JSON.stringify(body),
+       MessageBody: `const data = \`${JSON.stringify(body)}\`;`,
        QueueUrl: config.queueUrl
      };
  

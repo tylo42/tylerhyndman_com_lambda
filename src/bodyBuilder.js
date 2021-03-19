@@ -38,15 +38,16 @@ class BodyBuilder {
     }
 
     transformWaypoint(waypoint) {
-        const result = Object.assign({}, waypoint)
-
-        result.when = (waypoint.end) ? 
-                `${waypoint.start} - ${waypoint.end}` :
-                `Since ${waypoint.start}`
-        delete result.start;
-        delete result.end;
-
-        return result;
+        return {
+            title: waypoint.title,
+            role: waypoint.role,
+            location: waypoint.location,
+            link: waypoint.link,
+            details: waypoint.details,
+            when:  (waypoint.end) ? 
+                        `${waypoint.start} - ${waypoint.end}` :
+                        `Since ${waypoint.start}`
+        }
     }
     
     async getFlair() {

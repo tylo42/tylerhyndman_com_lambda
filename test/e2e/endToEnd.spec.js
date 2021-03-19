@@ -75,7 +75,7 @@ describe("End to end test", () => {
 
         const messages = await sqsPromise;
         expect(messages.length).to.equal(1);
-        expect(JSON.parse(messages[0].Body)).to.deep.equal(expectedResponse);
+        expect(messages[0].Body).to.deep.equal(`const data = \`${JSON.stringify(expectedResponse)}\`;`);
 
     });
 
