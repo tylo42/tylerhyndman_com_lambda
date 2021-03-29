@@ -4,8 +4,10 @@
   "description": "An AWS Lambda that pulls data out of multiple DynamoDB tables and returns them in JSON format.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./test/unit/*.spec.js",
-    "e2e": "mocha ./test/e2e/*.spec.js",
+    "docker:run": "docker-compose up -d",
+    "docker:stop": "docker-compose down",
+    "test:unit": "mocha ./test/unit/*.spec.js",
+    "test:e2e": "mocha ./test/e2e/*.spec.js",
     "check": "eslint ./src/*.js"
   },
   "repository": {
