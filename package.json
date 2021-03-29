@@ -6,6 +6,7 @@
   "scripts": {
     "docker:run": "docker-compose up -d",
     "docker:stop": "docker-compose down",
+    "test": "./runAllTests.sh",
     "test:unit": "mocha ./test/unit/*.spec.js",
     "test:e2e": "mocha ./test/e2e/*.spec.js",
     "check": "eslint ./src/*.js"
