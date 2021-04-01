@@ -10,27 +10,37 @@ const { dataServiceFactory } = require('../../src/dataService.js');
 chai.use(sinonChai);
 
 describe('data service', () => {
-    afterEach(() => {
-        sinon.restore();
-    })
-
     const emtpyResponse = {
         Items: []
     };
 
-    it('returns an empty object when all table results are empty', async () => {
-        const database = {
+    let database;
+
+    let testObject;
+
+    beforeEach(() => {
+        database = {
             read: sinon.stub()
         }
 
         database.read.withArgs("metadata", 1).returns(emtpyResponse);
-        database.read.withArgs("waypoints", 10).returns(emtpyResponse)
+        database.read.withArgs("waypoints", 10).returns(emtpyResponse);
         database.read.withArgs("flair", 10).returns(emtpyResponse);
 
-        const testObject = dataServiceFactory(database);
+        testObject = dataServiceFactory(database);
+    })
 
+    afterEach(() => {
+        sinon.restore();
+    })
+
+    it('returns an empty object when all table results are empty', async () => {
+        // Arrange
+
+        // Act
         const result = await testObject.get();
 
+        // Assert
         expect(result).to.deep.equal({
             name: null,
             waypointTitle: null,
@@ -42,10 +52,7 @@ describe('data service', () => {
     });
 
     it('returns the metadata from the database', async () => {
-        const database = {
-            read: sinon.stub()
-        }
-
+        // Arrange
         database.read.withArgs("metadata", 1).returns({
             Items: [{
                 name: "Name",
@@ -54,13 +61,11 @@ describe('data service', () => {
                 headImage: "Head Image"
             }]
         });
-        database.read.withArgs("waypoints", 10).returns(emtpyResponse)
-        database.read.withArgs("flair", 10).returns(emtpyResponse);
 
-        const testObject = dataServiceFactory(database);
-
+        // Act
         const result = await testObject.get();
 
+        // Assert
         expect(result).to.deep.equal({
             name: "Name",
             waypointTitle: "Waypoint Title",
@@ -72,11 +77,7 @@ describe('data service', () => {
     });
 
     it('returns the sorted waypoints from the database', async () => {
-        const database = {
-            read: sinon.stub()
-        }
-
-        database.read.withArgs("metadata", 1).returns(emtpyResponse);
+        // Arrange
         database.read.withArgs("waypoints", 10).returns({
             Items: [
                 {
@@ -107,12 +108,11 @@ describe('data service', () => {
                 }
             ]
         })
-        database.read.withArgs("flair", 10).returns(emtpyResponse);
 
-        const testObject = dataServiceFactory(database);
-
+        // Act
         const result = await testObject.get();
 
+        // Assert
         expect(result).to.deep.equal({
             name: null,
             waypointTitle: null,
@@ -149,12 +149,7 @@ describe('data service', () => {
     });
 
     it('returns the sorted flair from the database', async () => {
-        const database = {
-            read: sinon.stub()
-        }
-
-        database.read.withArgs("metadata", 1).returns(emtpyResponse);
-        database.read.withArgs("waypoints", 10).returns(emtpyResponse)
+        // Arrange
         database.read.withArgs("flair", 10).returns({
             Items: [
                 {
@@ -175,10 +170,10 @@ describe('data service', () => {
             ]
         });
 
-        const testObject = dataServiceFactory(database);
-
+        // Act
         const result = await testObject.get();
 
+        // Assert
         expect(result).to.deep.equal({
             name: null,
             waypointTitle: null,
