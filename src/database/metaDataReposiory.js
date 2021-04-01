@@ -1,3 +1,5 @@
+'use strict';
+
 class MetaDataRepository {
     constructor(database) {
         this.database = database;

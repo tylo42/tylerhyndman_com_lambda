@@ -1,18 +1,20 @@
 'use strict';
 
 const MetaDataRepository = require("./database/metaDataReposiory");
+const WaypointRepository = require("./database/waypointRepository");
 
 class DataService {
 
-    constructor(database, metaDataRepository) {
+    constructor(database, metaDataRepository, waypointRepository) {
         this.database = database;
         this.metaDataRepository = metaDataRepository;
+        this.waypointRepository = waypointRepository;
     }
 
     async get() {
         const [metadata, waypoints, flair] = await Promise.all([
             this.metaDataRepository.get(), 
-            this.getWaypoints(), 
+            this.waypointRepository.get(), 
             this.getFlair()]);
 
         return {
@@ -22,25 +24,6 @@ class DataService {
             headImage: metadata.headImage,
             waypoints,
             flair
-        }
-    }
-    
-    async getWaypoints() {
-        return (await this.database.read('waypoints', 10)).Items
-            .sort((a, b) => (a.start < b.start) ? 1 : -1)
-            .map(this.transformWaypoint);
-    }
-
-    transformWaypoint(waypoint) {
-        return {
-            title: waypoint.title,
-            role: waypoint.role,
-            location: waypoint.location,
-            link: waypoint.link,
-            details: waypoint.details,
-            when:  (waypoint.end) ? 
-                        `${waypoint.start} - ${waypoint.end}` :
-                        `Since ${waypoint.start}`
         }
     }
     
@@ -59,5 +42,7 @@ class DataService {
 }
 
 exports.dataServiceFactory = (database) => {
-    return new DataService(database, new MetaDataRepository(database));
+    return new DataService(database, 
+        new MetaDataRepository(database),
+        new WaypointRepository(database));
 }
