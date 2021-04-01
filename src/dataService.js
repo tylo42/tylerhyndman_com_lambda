@@ -1,5 +1,7 @@
 'use strict';
 
+const MetaDataRepository = require("./database/metaDataReposiory");
+
 class DataService {
 
     constructor(database, metaDataRepository) {
@@ -56,4 +58,6 @@ class DataService {
     }
 }
 
-module.exports = DataService
+exports.dataServiceFactory = (database) => {
+    return new DataService(database, new MetaDataRepository(database));
+}

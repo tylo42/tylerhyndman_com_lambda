@@ -2,12 +2,11 @@
 
 
 const database = require('./database/database.js');
-const MetaDataRepository = require('./database/metaDataReposiory');
-const DataService = require('./dataService.js');
+const { dataServiceFactory } = require('./dataService.js');
 const { publish } = require('./publish.js');
  
 exports.handler = async () => {
-    const bodyBuilder = new DataService(database, new MetaDataRepository(database));
+    const bodyBuilder = dataServiceFactory(database);
 
     const body = await bodyBuilder.get();
     

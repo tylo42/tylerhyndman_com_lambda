@@ -5,8 +5,7 @@ const chai = require('chai');
 const { expect } = require('chai');
 const sinonChai = require('sinon-chai');
 
-const DataService = require('../../src/dataService.js');
-const MetaDataRepository = require('../../src/database/metaDataReposiory.js');
+const { dataServiceFactory } = require('../../src/dataService.js');
 
 chai.use(sinonChai);
 
@@ -28,7 +27,7 @@ describe('data service', () => {
         database.read.withArgs("waypoints", 10).returns(emtpyResponse)
         database.read.withArgs("flair", 10).returns(emtpyResponse);
 
-        const testObject = new DataService(database, new MetaDataRepository(database));
+        const testObject = dataServiceFactory(database);
 
         const result = await testObject.get();
 
@@ -58,7 +57,7 @@ describe('data service', () => {
         database.read.withArgs("waypoints", 10).returns(emtpyResponse)
         database.read.withArgs("flair", 10).returns(emtpyResponse);
 
-        const testObject = new DataService(database, new MetaDataRepository(database));
+        const testObject = dataServiceFactory(database);
 
         const result = await testObject.get();
 
@@ -110,7 +109,7 @@ describe('data service', () => {
         })
         database.read.withArgs("flair", 10).returns(emtpyResponse);
 
-        const testObject = new DataService(database, new MetaDataRepository(database));
+        const testObject = dataServiceFactory(database);
 
         const result = await testObject.get();
 
@@ -176,7 +175,7 @@ describe('data service', () => {
             ]
         });
 
-        const testObject = new DataService(database, new MetaDataRepository(database));
+        const testObject = dataServiceFactory(database);
 
         const result = await testObject.get();
 
