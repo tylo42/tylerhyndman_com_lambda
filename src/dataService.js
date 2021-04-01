@@ -1,6 +1,6 @@
 'use strict';
 
-class BodyBuilder {
+class DataService {
 
     constructor(database, metaDataRepository) {
         this.database = database;
@@ -56,4 +56,4 @@ class BodyBuilder {
     }
 }
 
-module.exports = BodyBuilder
+module.exports = DataService
