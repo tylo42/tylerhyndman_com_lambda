@@ -2,20 +2,23 @@
 
 const MetaDataRepository = require("./database/metaDataReposiory");
 const WaypointRepository = require("./database/waypointRepository");
+const FlairRepository = require("./database/flairRepository");
 
 class DataService {
 
-    constructor(database, metaDataRepository, waypointRepository) {
+    constructor(database, metaDataRepository, waypointRepository, flairRepository) {
         this.database = database;
         this.metaDataRepository = metaDataRepository;
         this.waypointRepository = waypointRepository;
+        this.flairRepository = flairRepository;
     }
 
     async get() {
         const [metadata, waypoints, flair] = await Promise.all([
             this.metaDataRepository.get(), 
             this.waypointRepository.get(), 
-            this.getFlair()]);
+            this.flairRepository.get()
+        ]);
 
         return {
             name: metadata.name,
@@ -26,23 +29,12 @@ class DataService {
             flair
         }
     }
-    
-    async getFlair() {
-        return (await this.database.read('flair', 10)).Items
-            .sort((a, b) => (a.id > b.id) ? 1 : -1)
-            .map(this.transformFlair);
-    }
-
-    transformFlair(flair) {
-        return {
-            image: flair.image,
-            link: flair.link
-        }
-    }
 }
 
 exports.dataServiceFactory = (database) => {
     return new DataService(database, 
         new MetaDataRepository(database),
-        new WaypointRepository(database));
+        new WaypointRepository(database),
+        new FlairRepository(database)
+    );
 }
