@@ -1,6 +1,6 @@
 'user strict';
 
-const config = require('./config.js');
+const config = require('../config.js');
 const AWS = require('aws-sdk');
 
 AWS.config.update(config.awsConfig);

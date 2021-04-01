@@ -1,7 +1,7 @@
 'use strict';
 
 
-const database = require('./database.js');
+const database = require('./database/database.js');
 const BodyBuilder = require('./bodyBuilder.js');
 const { publish } = require('./publish.js');
  

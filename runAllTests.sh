@@ -20,9 +20,6 @@ npx lambda-local -l src/index.js -h handler --watch 8081 &
 PID_OF_LAMBDA=$!
 sleep 1
 
-echo "HERE: $PID_OF_LAMBDA"
-ps aux | grep lambda-local
-
 aws --endpoint-url http://localhost:9324 sqs send-message --queue-url http://localhost:9324/queue/default --message-body "Testing" | cat
 kill -0 $PID_OF_LAMBDA # Will exit if the lambda process is not running
 
