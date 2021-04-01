@@ -6,9 +6,9 @@ const { dataServiceFactory } = require('./dataService.js');
 const { publish } = require('./publish.js');
  
 exports.handler = async () => {
-    const bodyBuilder = dataServiceFactory(database);
+    const dataService = dataServiceFactory(database);
 
-    const body = await bodyBuilder.get();
+    const body = await dataService.get();
     
     const response = {
         statusCode: 200,
