@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const sinonChai = require('sinon-chai');
 
 const BodyBuilder = require('../../src/bodyBuilder.js');
+const MetaDataRepository = require('../../src/database/metaDataReposiory.js');
 
 chai.use(sinonChai);
 
@@ -27,7 +28,7 @@ describe('body builder', () => {
         database.read.withArgs("waypoints", 10).returns(emtpyResponse)
         database.read.withArgs("flair", 10).returns(emtpyResponse);
 
-        const testObject = new BodyBuilder(database);
+        const testObject = new BodyBuilder(database, new MetaDataRepository(database));
 
         const result = await testObject.build();
 
@@ -57,7 +58,7 @@ describe('body builder', () => {
         database.read.withArgs("waypoints", 10).returns(emtpyResponse)
         database.read.withArgs("flair", 10).returns(emtpyResponse);
 
-        const testObject = new BodyBuilder(database);
+        const testObject = new BodyBuilder(database, new MetaDataRepository(database));
 
         const result = await testObject.build();
 
@@ -109,7 +110,7 @@ describe('body builder', () => {
         })
         database.read.withArgs("flair", 10).returns(emtpyResponse);
 
-        const testObject = new BodyBuilder(database);
+        const testObject = new BodyBuilder(database, new MetaDataRepository(database));
 
         const result = await testObject.build();
 
@@ -175,7 +176,7 @@ describe('body builder', () => {
             ]
         });
 
-        const testObject = new BodyBuilder(database);
+        const testObject = new BodyBuilder(database, new MetaDataRepository(database));
 
         const result = await testObject.build();
 

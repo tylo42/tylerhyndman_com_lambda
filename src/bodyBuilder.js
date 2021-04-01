@@ -2,12 +2,16 @@
 
 class BodyBuilder {
 
-    constructor(database) {
+    constructor(database, metaDataRepository) {
         this.database = database;
+        this.metaDataRepository = metaDataRepository;
     }
 
     async build() {
-        const [metadata, waypoints, flair] = await Promise.all([this.getMetaData(), this.getWaypoints(), this.getFlair()]);
+        const [metadata, waypoints, flair] = await Promise.all([
+            this.metaDataRepository.get(), 
+            this.getWaypoints(), 
+            this.getFlair()]);
 
         return {
             name: metadata.name,
@@ -16,18 +20,6 @@ class BodyBuilder {
             headImage: metadata.headImage,
             waypoints,
             flair
-        }
-    }
-    
-    async getMetaData() {
-        const metadata = await this.database.read('metadata', 1);
-        const firstItem = metadata.Items[0];
-
-        return {
-            name: (firstItem) ? firstItem.name : null,
-            waypointTitle: (firstItem) ? firstItem.waypointTitle : null,
-            profileImage: (firstItem) ? firstItem.profileImage : null,
-            headImage: (firstItem) ? firstItem.headImage : null
         }
     }
     
