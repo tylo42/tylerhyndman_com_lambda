@@ -7,7 +7,7 @@ class DataService {
         this.metaDataRepository = metaDataRepository;
     }
 
-    async build() {
+    async get() {
         const [metadata, waypoints, flair] = await Promise.all([
             this.metaDataRepository.get(), 
             this.getWaypoints(), 

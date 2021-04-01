@@ -30,7 +30,7 @@ describe('data service', () => {
 
         const testObject = new DataService(database, new MetaDataRepository(database));
 
-        const result = await testObject.build();
+        const result = await testObject.get();
 
         expect(result).to.deep.equal({
             name: null,
@@ -60,7 +60,7 @@ describe('data service', () => {
 
         const testObject = new DataService(database, new MetaDataRepository(database));
 
-        const result = await testObject.build();
+        const result = await testObject.get();
 
         expect(result).to.deep.equal({
             name: "Name",
@@ -112,7 +112,7 @@ describe('data service', () => {
 
         const testObject = new DataService(database, new MetaDataRepository(database));
 
-        const result = await testObject.build();
+        const result = await testObject.get();
 
         expect(result).to.deep.equal({
             name: null,
@@ -178,7 +178,7 @@ describe('data service', () => {
 
         const testObject = new DataService(database, new MetaDataRepository(database));
 
-        const result = await testObject.build();
+        const result = await testObject.get();
 
         expect(result).to.deep.equal({
             name: null,

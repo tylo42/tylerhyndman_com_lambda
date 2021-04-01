@@ -9,7 +9,7 @@ const { publish } = require('./publish.js');
 exports.handler = async () => {
     const bodyBuilder = new DataService(database, new MetaDataRepository(database));
 
-    const body = await bodyBuilder.build();
+    const body = await bodyBuilder.get();
     
     const response = {
         statusCode: 200,
